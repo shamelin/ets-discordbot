@@ -1,3 +1,4 @@
 {
-    "token": "ENTER_DISCORD_TOKEN"
+    "token": "INSERT_DISCORD_TOKEN",
+    "cmd_prefix": "!"
 }

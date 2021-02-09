@@ -22,37 +22,39 @@ const Discord = require('discord.js');
 const { createLogger, format, transports } = require("winston");
 const { consoleFormat } = require("winston-console-format");
 
+const UsersController = require('./users/controller');
+
 // Modules path
 const modulesPath = path.join(__dirname, "modules");
 
  /**
-  * Classe représentant le bot Discord.
-  * 
-  * Permet d'initialiser la librarie discord.js et créer les
-  * endpoints nécessaire aux transactions avec Discord.
+  * Represents the Discord bot.
   */
 class ETSBot {
     constructor() {
+        this.settings = {};
         this.client = new Discord.Client();
 
-        // On lit le fichier de config et on l'initialise
+        // Load the settings and initialize this.settings
         this.loadSettings();
 
-        // On charge winston
+        // Load winston
         this.loadLogger();
-        this.logger.info("Hello world!");
+        this.logger.info("Initializing ÉTS Discord bot...");
 
-        // On setup les endpoints pour le bot
+        // Load controllers
+        this.users = new UsersController( this );
+
+        // Setup modules
         this.loadModules();
 
-        // On lance le bot!
+        // Ready!
         this.client.login( this.settings["token"] );
-        this.logger.info("ÉTS bot successfully started!");
     }
 
     /**
-     * Initialise le fichier de configuration dans la mémoire.
-     * Définie automatiquement la valeur de {@link #settings}.
+     * Initializes the config settings in the memory.
+     * Automatically defines the {@link #settings} variable.
      */
     loadSettings() {
         this.settings = JSON.parse(
@@ -61,7 +63,7 @@ class ETSBot {
     }
 
     /**
-     * Configure le système de log correctement à l'aide de winston.
+     * Initializes the log system with winston.
      */
     loadLogger() {
         // Initiating Logger
@@ -121,7 +123,7 @@ class ETSBot {
     }
 
     /**
-     * Chargement des modules du bot.
+     * Lods the bot's modules.
      */
     loadModules() {
         // Reads all the files in a directory

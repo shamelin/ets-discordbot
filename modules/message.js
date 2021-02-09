@@ -16,7 +16,14 @@
 
 const onMessage = (bot) => {
     bot.client.on("message", (msg) => {
-        bot.logger.warn(msg);
+
+        if(msg.content.startsWith( bot.settings.cmd_prefix )
+            && msg.content.length > bot.settings.cmd_prefix.length) {
+
+            // if the user entered a command
+            bot.logger.silly( `User ${msg.author.username} (${msg.author.id}) `
+                                + `said: "${msg.content}"` );
+        }
     });
 };
 
